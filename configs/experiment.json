@@ -1,0 +1,237 @@
+{
+  "design_version": "2.0",
+  "purpose": "optimization_trial",
+  "environment": "recsim",
+  "method": "full",
+  "seed": 2026,
+  "smoke": false,
+  "env": {
+    "num_clients": 5,
+    "catalog_size": 2000,
+    "feature_dim": 16,
+    "candidate_size": 100,
+    "slate_size": 5,
+    "horizon": 20,
+    "initial_temper": 20,
+    "catalog_seed": 1729,
+    "partition_seed": 2718
+  },
+  "environment_overrides": {
+    "kuaisim": {
+      "env": {
+        "catalog_size": 20000
+      },
+      "data": {
+        "min_item_count": 25
+      }
+    },
+    "recsim": {
+      "env": {
+        "catalog_size": 2000
+      },
+      "data": {
+        "min_item_count": 5
+      }
+    }
+  },
+  "agent": {
+    "adapter_dim": 64,
+    "latent_dim": 32,
+    "hidden_dim": 64,
+    "sequence_hidden": 32,
+    "statistic_hidden": 64,
+    "batch_size": 128,
+    "replay_capacity": 100000,
+    "learning_starts": 256,
+    "lr": 0.0003,
+    "gamma": 0.95,
+    "tau": 0.005,
+    "policy_delay": 2,
+    "exploration_noise": 0.1,
+    "actor_updates_encoder": false,
+    "critic_action_representation": "slate_mean_st",
+    "slate_surrogate_temperature": 1.0,
+    "learned_items": true,
+    "item_regularization": 0.1
+  },
+  "federation": {
+    "prototypes": 16,
+    "anchors": 16,
+    "model_steps": 100,
+    "aux_steps": 300,
+    "probe_candidates": 64,
+    "probe_selected": 8,
+    "probe_items": 50,
+    "model_sample_limit": 4096,
+    "fixed_point_abs_bound": 0.001,
+    "fixed_point_relative_bound": 0.01,
+    "fixed_point_max_iterations": 1000,
+    "ot_solver_max_iterations": 100000,
+    "ot_marginal_tolerance": 1e-08,
+    "metric_alpha": 0.1,
+    "lambda_metric": 1.0,
+    "lambda_align": 1.0,
+    "lambda_distill": 1.0,
+    "geometry_optimizer": "shared",
+    "geometry_lr": 0.0003,
+    "geometry_grad_clip": 10.0,
+    "geometry_schedule": "aggregate_then_align",
+    "query_protocol": "indexed_v1",
+    "coverage": {
+      "mode": "replay_knn_rank",
+      "shadow": false,
+      "neighbors": 8,
+      "tail_alpha": 0.05,
+      "sample_limit": 4096,
+      "min_reference": 64,
+      "min_calibration": 128,
+      "min_check": 128,
+      "min_episodes": 2,
+      "degenerate_radius": 1e-08
+    },
+    "distill_steps": 20,
+    "sigma_anchor": 1.0,
+    "sigma_probe": 1.0,
+    "sigma_profile": 1.0,
+    "model_hidden": 64,
+    "model_lr": 0.001,
+    "model_batch": 128,
+    "occupancy_sample_limit": 4096,
+    "anchor_lr": 0.03,
+    "anchor_iterations": 5,
+    "anchor_gradient_steps": 10,
+    "gw_iterations": 50,
+    "gw_tol_rel": 1e-07,
+    "gw_tol_abs": 1e-09,
+    "probe_neighbors": 3,
+    "support_threshold": 0.05,
+    "coverage_fraction": 0.6,
+    "transfer_temperature": 0.2,
+    "policy_temperature": 1.0,
+    "probability_epsilon": 1e-12,
+    "replay_bridge": {
+      "neighbors": 4,
+      "sample_limit": 4096
+    },
+    "distillation_audit": true
+  },
+  "training": {
+    "requests_per_client": 40000,
+    "warmup": 8000,
+    "communication_every": 2000,
+    "updates_per_request": 1,
+    "update_every": 1,
+    "checkpoint_every": 2000,
+    "resume_every": 10000,
+    "cpu_threads": 4,
+    "deterministic": true
+  },
+  "evaluation": {
+    "every": 4000,
+    "curve_sessions": 100,
+    "final_sessions": 500,
+    "comparison_requests": 40000,
+    "seed": 314159,
+    "validation_seed": 271828,
+    "validation_sessions": 500,
+    "calibration_sessions": 500,
+    "diagnostic_seed": 918273,
+    "matched_comparison_all_methods": true,
+    "validation_every_round": true
+  },
+  "data": {
+    "train_fraction": 0.7,
+    "val_fraction": 0.1,
+    "min_item_count": 5,
+    "static_feature_columns": [],
+    "duplicate_policy": "drop_exact"
+  },
+  "response": {
+    "epochs": 20,
+    "batch_size": 1024,
+    "num_workers": 4,
+    "hidden": 32,
+    "history_length": 20,
+    "seed": 1234,
+    "max_train_rows": 2000000,
+    "sample_window": 128,
+    "learning_rate": 0.001
+  },
+  "storage": {
+    "mode": "compact",
+    "analysis_checkpoints": true
+  },
+  "cost": {
+    "protocol_version": 2,
+    "controlled_load": false,
+    "target_fraction": 0.9,
+    "pilot_seed": 3026,
+    "targets_path": null,
+    "freeze_path": null,
+    "jobs_per_device": 1,
+    "require_calibrated_target": true
+  },
+  "preflight": {
+    "mode": "environment_audit_only"
+  },
+  "baselines": {
+    "fedrag": {
+      "metric_weight": 1.0,
+      "proximal_weight": 0.01,
+      "angle_weight": 0.5,
+      "variance_min": 0.0001,
+      "variance_max": 1.0,
+      "model_lr": 0.001
+    },
+    "gpfedrec": {
+      "regularization": 0.1,
+      "threshold_scale": 1.0,
+      "graph_layers": 1
+    }
+  },
+  "comparison": {
+    "baselines": [
+      "fedrag",
+      "gpfedrec"
+    ]
+  },
+  "trial": {
+    "version": "v23",
+    "freeze_path": null
+  },
+  "output_baselines": {
+    "fedhpd": {
+      "queries": 64,
+      "items": 50,
+      "query_seed": 49171,
+      "weight": 1.0
+    },
+    "fedslate": {
+      "batch_size": 32,
+      "stage_bins": 4,
+      "contexts_per_bin": 4,
+      "sample_limit": 4096,
+      "hidden": 64,
+      "server_steps": 20,
+      "weight": 1.0
+    }
+  },
+  "methodology": {
+    "version": "action-grounded-v2",
+    "reference_actions": 8,
+    "reference_seed": 22049,
+    "signature_horizon": 3,
+    "calibration_quantile": 0.95,
+    "signature_threshold": 1.0,
+    "gw_weight": 1.0,
+    "coverage_reward": 1.0,
+    "matching_steps": 30,
+    "support_threshold": 0.05,
+    "match_threshold": 0.1,
+    "support_sigma": 1.0,
+    "eta": 0.25,
+    "local_neighbors": 4,
+    "recalibration_steps": 20,
+    "recalibration_alignment_steps": 20
+  }
+}

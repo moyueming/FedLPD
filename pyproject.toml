@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "FedLPD"
+version = "0.1.0"
+description = "Reproducible unpaired heterogeneous federated RL recommendation experiments"
+requires-python = ">=3.11,<3.13"
+dependencies = ["numpy>=1.26.4,<2", "scipy>=1.12,<2", "pandas>=2.1,<3", "torch>=2.5,<3", "POT>=0.9.5,<0.10", "PyYAML>=6,<7", "gym==0.26.2", "six==1.17.0", "absl-py==2.5.0", "gin-config==0.5.0"]
+
+[project.scripts]
+fedlpd = "fedlpd.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
