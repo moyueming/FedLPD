@@ -37,7 +37,7 @@ We present **FedLPD**, a federated reinforcement learning method for recommendat
 ## 🧩 Method Overview
 
 <p align="center">
-  <img src="assets/fedlpd-framework.png" width="100%" alt="FedLPD framework: the server performs behavioral anchor matching, latent query selection, and policy response relay. Each client has a private adapter, shared projector, policy, local critic, and advantage gate for personalized distillation.">
+  <img src="assets/fedlpd-workflow.gif" width="100%" alt="FedLPD framework: the server performs behavioral anchor matching, latent query selection, and policy response relay. Each client has a private adapter, shared projector, policy, local critic, and advantage gate for personalized distillation.">
 </p>
 
 We organize FedLPD into a shared server workflow and local client updates, as shown above. We retain private observation histories and replay data on each client.
