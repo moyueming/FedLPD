@@ -22,7 +22,9 @@
   <a href="#output-files">Outputs</a>
 </p>
 
-## Overview
+<a id="overview"></a>
+
+## 📌 Overview
 
 We present **FedLPD**, a federated reinforcement learning method for recommendation with heterogeneous client representations. We use behavioral information to align local latent spaces and personalized policy distillation to transfer knowledge across clients. In this repository, we provide the code for preparing the environments, training FedLPD and the comparison methods, and exporting numerical results.
 
@@ -30,15 +32,27 @@ We present **FedLPD**, a federated reinforcement learning method for recommendat
 - **Personalized policy distillation.** We use supported latent queries and recipient-specific teachers to transfer policy knowledge across clients.
 - **Reproducible evaluation.** We provide a shared experimental workflow for KuaiSim and RecSim, with fixed interaction budgets and numerical result exports.
 
-## Method Overview
+<a id="method-overview"></a>
+
+## 🧩 Method Overview
 
 <p align="center">
-  <img src="assets/fedlpd-method.png" width="100%" alt="FedLPD workflow: clients estimate behavioral summaries locally; the server matches summaries and constructs shared latent anchors; supported queries and recipient-specific teachers enable local policy distillation.">
+  <img src="assets/fedlpd-framework.png" width="100%" alt="FedLPD framework: the server performs behavioral anchor matching, latent query selection, and policy response relay. Each client has a private adapter, shared projector, policy, local critic, and advantage gate for personalized distillation.">
 </p>
 
-We retain private observation histories on each client. Clients estimate behavioral summaries from their local replay, and the server uses these summaries to match local structures and construct shared latent anchors. Supported queries provide a common interface for policy exchange; each recipient uses its own value estimates to form a personalized teacher for local distillation.
+We organize FedLPD into a shared server workflow and local client updates, as shown above. We retain private observation histories and replay data on each client.
 
-## Installation
+On the **server side**, we coordinate three steps:
+
+1. **Behavioral Anchor Matching.** We match client behavioral summaries grounded in shared reference actions to construct shared anchors through partial matching.
+2. **Latent Query Selection.** We filter candidate queries using replay support and select queries based on policy disagreement, providing a common interface for policy exchange.
+3. **Policy Response Relay.** We collect policy responses to the selected queries and relay peer responses to each recipient client.
+
+On the **client side**, we map private observations through a private adapter and shared projector to the policy, and use metric learning and alignment to shape the latent representation. Each client uses its own **local critic and advantage gate** to evaluate peer responses, form a personalized teacher, and distill accepted guidance into its policy. Local action–feedback interaction continues to supply experience for learning.
+
+<a id="installation"></a>
+
+## ⚙️ Installation
 
 We use **Python 3.11 or 3.12**. The commands below assume a Linux shell and should be run from the repository root. You can use an existing environment or create one:
 
@@ -57,7 +71,9 @@ python -m fedlpd doctor --device cuda:0 --strict
 
 We install RecSim without its unused TensorFlow/Dopamine dependencies. For a CPU environment check, replace `--device cuda:0` with `--device cpu`.
 
-## Data Preparation
+<a id="data-preparation"></a>
+
+## 📦 Data Preparation
 
 We use the public [KuaiRand-1K dataset](https://zenodo.org/records/10439422/files/KuaiRand-1K.tar.gz) to prepare the KuaiSim environment. Download and extract it under `data/`. The archive MD5 is `6b0b9c8222d67fcd4c676218edca3f1f`.
 
@@ -70,7 +86,9 @@ python -m fedlpd fit-response --config configs/experiment.json --data-dir data/p
 
 We reuse these prepared assets across the comparison methods. If you store them elsewhere, update `--data-dir` and `--response` in the experiment command below. **RecSim does not require an external dataset.**
 
-## Experiments
+<a id="experiments"></a>
+
+## 🚀 Run Experiments
 
 ### Check the workflow with synthetic data
 
@@ -110,7 +128,9 @@ For fewer GPUs, adjust `--devices` to list the available devices. Optional `--cp
 
 </details>
 
-## Experimental Protocol
+<a id="experimental-protocol"></a>
+
+## 📊 Experimental Protocol
 
 We evaluate FedLPD in two environments: a **KuaiSim environment built from KuaiRand-1K interaction logs** and a **RecSim environment generated locally**. We adapt the baselines to the shared recommendation environment and use the same task and evaluation protocol within each environment.
 
@@ -141,7 +161,9 @@ The configuration is stored in [`configs/experiment.json`](configs/experiment.js
 
 </details>
 
-## Output Files
+<a id="output-files"></a>
+
+## 📁 Output Files
 
 We save aggregated results under `outputs/full/results/finish/report/` and retain the underlying run records for further analysis:
 
