@@ -33,7 +33,7 @@ We present **FedLPD**, a federated reinforcement learning method for recommendat
 ## Method Overview
 
 <p align="center">
-  <img src="assets/method-overview.png?v=2" width="100%" alt="FedLPD workflow: clients estimate behavioral summaries locally; the server matches summaries and constructs shared latent anchors; supported queries and recipient-specific teachers enable local policy distillation.">
+  <img src="assets/fedlpd-method.png" width="100%" alt="FedLPD workflow: clients estimate behavioral summaries locally; the server matches summaries and constructs shared latent anchors; supported queries and recipient-specific teachers enable local policy distillation.">
 </p>
 
 We retain private observation histories on each client. Clients estimate behavioral summaries from their local replay, and the server uses these summaries to match local structures and construct shared latent anchors. Supported queries provide a common interface for policy exchange; each recipient uses its own value estimates to form a personalized teacher for local distillation.
